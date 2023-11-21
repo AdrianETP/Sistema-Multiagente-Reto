@@ -1,0 +1,6 @@
+matplotlib
+mesa
+numpy
+math
+random
+flask
