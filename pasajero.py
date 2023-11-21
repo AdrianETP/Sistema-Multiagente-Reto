@@ -75,6 +75,7 @@ class Pasajero(Agent):
             self.satisfaccion_0()
             self.model.grid.remove_agent(self)
             self.model.schedule.remove(self)
+            self.model.pasajeros_no_satisfechos +=1
             return
         # buscar estacion
         # checar si este tiene trenes

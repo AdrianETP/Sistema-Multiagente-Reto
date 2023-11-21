@@ -37,7 +37,6 @@ class Tren(Agent):
             else:
                 self.model.grid.move_agent(self, (self.pos[0]+1, self.pos[1]))
         else:
-            print("estamos en estacion: " , self.estacion[0].ubicacion)
             if self.timer >0:
                 
                 
@@ -50,6 +49,4 @@ class Tren(Agent):
                 self.estacion = None
                 self.timer = 0
                 self.model.grid.move_agent(self, (self.pos[0]+1, self.pos[1]))
-                print("en movimiento")
-                print("pasajeros" , self.pasengers)
 

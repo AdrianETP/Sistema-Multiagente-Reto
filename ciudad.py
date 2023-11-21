@@ -33,6 +33,7 @@ class Ciudad(Model):
         self.height = 140
         self.width = 21
         self.ids = []
+        self.pasajeros_no_satisfechos = 0
         self.posibles_ubicaciones = [
             0,
             1,
@@ -74,6 +75,7 @@ class Ciudad(Model):
                     )
 
         # creacion del tren
+        
         for i in range(10):
             possible_id = random.random()
             while possible_id in self.ids:
@@ -94,7 +96,7 @@ class Ciudad(Model):
             ubicacion = self.ubicaciones_estaciones[random.randrange(0 , len(self.ubicaciones_estaciones))]
             destino = self.posibles_ubicaciones[random.randrange(0 , len(self.posibles_ubicaciones))]
             while ubicacion == destino:
-                destino = self.ubicaciones_estaciones[random.randrange(0 , len(self.ubicaciones_estaciones))]
+                destino = self.posibles_ubicaciones[random.randrange(0 , len(self.posibles_ubicaciones))]
 
             pasajero_temp = pasajero.Pasajero(possible_id , self , ubicacion=ubicacion,  destino=destino  )
             self.schedule.add(pasajero_temp)

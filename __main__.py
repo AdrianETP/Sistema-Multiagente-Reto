@@ -6,9 +6,11 @@ import pasajero
 import tren
 import matplotlib.pyplot as plt
 
-cm = ciudad.Ciudad([1 , 5 , 8], 1000, [60 for i in range(0, 3)])
-cm.step() # funcion para el api
+cm = ciudad.Ciudad([1 , 5 , 8], 10000, [random.randrange(10,60 , 10) for i in range(0, 3)])
+for i in range(2000):
+    cm.step() # funcion para el api
 
+print("hubo ", cm.pasajeros_no_satisfechos , "pasajeros no satisfechos")
 dc = cm.datacollector.get_model_vars_dataframe()
 
 fig, axs = plt.subplots(figsize=(7, 7))
