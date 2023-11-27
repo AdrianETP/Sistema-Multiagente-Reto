@@ -23,16 +23,46 @@ def get_grid(model):
     return grid
 
 
+def get_model_state(model):
+    # Recopila datos de los agentes para convertirlos en un objeto que puede ser JSON serializable
+    model_state = {
+
+        "tren": {
+            "id": model.tren.id,
+            "pasajeros": model.tren.pasengers,
+            "limit": model.tren.limit,
+            "doors": model.tren.doors,
+            "position": model.tren.pos,
+            "timer": model.tren.timer,
+        },
+        # Cada estacion mide 10x10, entre cada estacion hay 5 de espacio
+        "estaciones": [(estacion * 15, 12) for estacion in model.ubicaciones_estaciones], #arrojja las posicones (y, x)
+        "pasajeros": [
+            {
+            "id": pasajero.unique_id,
+            "posicion": pasajero.pos,
+            "satisfaccion": pasajero.satisfaccion, # Si NO tiene un destino por lo tanto es nulo
+            "ubicacion": pasajero.ubicacion, # Cuando un agente sube al tren su estacion se vuleve nula
+
+            
+            "en_tren": pasajero.in_train
+        }
+        for pasajero in model.pasajeros
+        ]
+        
+
+    }
+    return model_state
 
 
-
-class Ciudad(Model):
+class Ciudad(Model): 
     def __init__(self, ubicaciones_estaciones, numero_personas, tiempos):
         super().__init__()
         self.grid = MultiGrid(140, 21, True)
         self.height = 140
         self.width = 21
         self.ids = []
+        self.pasajeros = []
         self.pasajeros_no_satisfechos = 0
         self.posibles_ubicaciones = [
             0,
@@ -52,39 +82,31 @@ class Ciudad(Model):
 
         # creacion de agentes
 
-        # estaciones
-        for i in range(0, len(self.ubicaciones_estaciones)):
-            for k in range(0, 9):
-                for j in range(0, 10):
-                    possible_id = random.random()
-                    while possible_id in self.ids:
-                        possible_id = random.random()
-                    self.ids.append(possible_id)
-                    estacion_temp = estacion.Estacion_Tren(
-                        possible_id,
-                        i,
-                        self.ubicaciones_estaciones[i],
-                        tiempos[i],
-                        self,
-                    )
-                    self.estaciones.append(estacion_temp)
-
-                    self.grid.place_agent(
-                        estacion_temp,
-                        (j + (self.ubicaciones_estaciones[i] * 15), k + 12),
-                    )
-
-        # creacion del tren
-        
-        for i in range(10):
+        # Creación de estaciones
+        for i, ubicacion in enumerate(self.ubicaciones_estaciones):
             possible_id = random.random()
             while possible_id in self.ids:
                 possible_id = random.random()
             self.ids.append(possible_id)
-            tren_temp = tren.Tren(possible_id, self, 0 , i)
-            self.tren = tren_temp
-            self.schedule.add(tren_temp)
-            self.grid.place_agent(tren_temp, (i, 11))
+            estacion_temp = estacion.Estacion_Tren(
+                possible_id,
+                i,
+                ubicacion,
+                tiempos[i],
+                self,
+            )
+            self.estaciones.append(estacion_temp)
+            # Coloca la estación en la ubicación correspondiente en la grilla
+            self.grid.place_agent(estacion_temp, (ubicacion * 15, 12))  # Ajusta las coordenadas según sea necesario
+
+        # Creación del tren
+        possible_id = random.random()
+        while possible_id in self.ids:
+            possible_id = random.random()
+        self.ids.append(possible_id)
+        self.tren = tren.Tren(possible_id, self, 0, 0)  # El tren tendrá un id y una posición inicial
+        self.schedule.add(self.tren)
+        self.grid.place_agent(self.tren, (0, 11))  # Ajusta las coordenadas según sea necesario
         self.datacollector = DataCollector(model_reporters={"Grid": get_grid})
 
         # pasajeros
@@ -101,8 +123,7 @@ class Ciudad(Model):
             pasajero_temp = pasajero.Pasajero(possible_id , self , ubicacion=ubicacion,  destino=destino  )
             self.schedule.add(pasajero_temp)
             self.grid.place_agent(pasajero_temp, (pasajero_temp.ubicacion*(15) + random.randrange(0 , 10), random.randrange(12 , 21)))
-
-
+            self.pasajeros.append(pasajero_temp)
 
 
     def step(self):

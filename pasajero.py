@@ -33,36 +33,22 @@ class Pasajero(Agent):
                 self.model.tren.pasengers -=1
                 self.in_destino = True
         else:
-            if self.pos[0]-self.ubicacion*15 > 4:
-                if self.pos[0] != self.ubicacion *15 +9:
-                    self.model.grid.move_agent(self , (self.pos[0]+1, self.pos[1]))
-                else:
-                    if self.pos[1] != 12:
-                        self.model.grid.move_agent(self, (self.pos[0] , self.pos[1]-1))
-                    else:
-                        if self.model.tren.pasengers != self.model.tren.limit:
-                            # hacer que el pasajero se suba al tren (que desaparezca del grid)
-                            self.model.tren.pasengers +=1
-                            self.in_train = True
-                            self.model.grid.remove_agent(self)
-                        else:
-                            self.subs_satisfaction()
-                            self.model.grid.move_agent(self,(self.ubicacion*(15) + random.randrange(0 , 10), random.randrange(12 , 21)) )
+        
+            if self.pos[0] != self.ubicacion *15 +9:
+                self.model.grid.move_agent(self , (self.pos[0]+1, self.pos[1]))
             else:
-                if self.pos [0] != self.ubicacion *15 :
-                    self.model.grid.move_agent(self , (self.pos[0]-1, self.pos[1]))
+                if self.pos[1] != 12:
+                    self.model.grid.move_agent(self, (self.pos[0] , self.pos[1]-1))
                 else:
-                    if self.pos[1] != 12:
-                        self.model.grid.move_agent(self, (self.pos[0] , self.pos[1]-1))
+                    if self.model.tren.pasengers != self.model.tren.limit:
+                        # hacer que el pasajero se suba al tren (que desaparezca del grid)
+                        self.model.tren.pasengers +=1
+                        self.in_train = True
+                        self.model.grid.remove_agent(self)
                     else:
-                        if self.model.tren.pasengers != self.model.tren.limit:
-                            # hacer que el pasajero se suba al tren (que desaparezca del grid)
-                            self.model.tren.pasengers +=1
-                            self.in_train = True
-                            self.model.grid.remove_agent(self)
-                        else:
-                            self.subs_satisfaction()
-                            self.model.grid.move_agent(self,(self.ubicacion*(15) + random.randrange(0 , 10), random.randrange(12 , 21)) )
+                        self.subs_satisfaction()
+                        self.model.grid.move_agent(self,(self.ubicacion*(15) + random.randrange(0 , 10), random.randrange(12 , 21)) )
+            
 
     def subs_satisfaction(self):
         self.satisfaccion -= 2
