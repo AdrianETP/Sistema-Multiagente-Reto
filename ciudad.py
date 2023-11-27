@@ -9,6 +9,7 @@ import tren
 from mesa.time import RandomActivation
 import random
 import pasajero
+
 def get_grid(model):
     grid = np.zeros((model.grid.width, model.grid.height))
     for cell in model.grid.coord_iter():
