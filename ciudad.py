@@ -47,6 +47,7 @@ def get_model_state(model):
                 "satisfaccion": pasajero.satisfaccion,  # Si NO tiene un destino por lo tanto es nulo
                 "ubicacion": pasajero.ubicacion,  # Cuando un agente sube al tren su estacion se vuleve nula
                 "en_tren": pasajero.in_train,
+                "llego_a_destino": pasajero.in_destino,
             }
             for pasajero in model.pasajeros
         ],
