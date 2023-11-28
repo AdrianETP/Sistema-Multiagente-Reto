@@ -10,7 +10,7 @@ from mesa.time import RandomActivation
 import random
 import pasajero
 
-
+# Función para obtener el estado actual de la grid del modelo
 def get_grid(model):
     grid = np.zeros((model.grid.width, model.grid.height))
     for cell in model.grid.coord_iter():
