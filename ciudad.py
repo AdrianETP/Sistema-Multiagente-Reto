@@ -24,7 +24,7 @@ def get_grid(model):
                 grid[x][y] = 3
     return grid
 
-
+# Función para obtener el estado actual del modelo
 def get_model_state(model):
     # Recopila datos de los agentes para convertirlos en un objeto que puede ser JSON serializable
     model_state = {
